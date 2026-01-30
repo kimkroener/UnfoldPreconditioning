@@ -62,6 +62,8 @@ export solve_with_preconditioner, solve_with_preconditioner_benchmark, solve_wit
 export summerize_benchmark_info, fullfills_symmetric_requirement, check_preconditioning_support
 
 export create_linear_system, create_solver_fun, simulate_data, extract_term_ranges, get_test_data, testcases_available
+export create_unfold_solver
+
 
 export plot_solver_preconditioner_heatmap
 export plot_model_matrix, preview_eeg_data 

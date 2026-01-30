@@ -60,10 +60,6 @@ function create_unfold_solver(
         )
 
 
-        # Unfold.jl has (n_regressors × n_channels)
-        # i do too but only internally (n_channels × n_regressors) because my simulate_data function probably mixes the dims up 
-        B = B'
-
         # Create empty standard error array matching B dimensions
         SE = similar(B, 0, size(B, 2))
         return Unfold.LinearModelFit(B, info, SE)
