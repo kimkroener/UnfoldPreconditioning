@@ -60,20 +60,19 @@ One liner
 
 ```julia
 beta, info = solve_with_preconditioner(X, y; solver=:lsmr,preconditioner=:jacobi)
-beta, benchmark_info, solver_diagnostics = solve_with_preconditioner(X, y; benchmark=true)
+beta, benchmark_info, compatibility_checks = solve_with_preconditioner_benchmark(X, y; solver=:klu, preconditioner=:ldl_reg, return_check=true)
 ```
 
 OR do it manually
 
 ```julia
-preconditioner = get_preconditioner(:jacobi)
-P = preconditioner.setup(X)
+preconditioner = get_preconditioner(:ilu0)
+Pl, Pr = preconditioner.setup(X'X)
 
 solver = get_solver(:lsmr)
-b = solver.solve(X, y; Pl=P.Pl, Pr=P.Pr)
+b, stats = solver.solve(X, y; Pl=Pl, Pr=Pr, atol=1e-6)
 
 # custom solve call
-# passing preconditioners as arguments uses a specific precond. solver implementation that is more stable that modifiy X, y in place beforehand 
 z = Krylov.lsmr!(X, y, Pl=P.Pl, Pr=P.Pr) 
 P.Pr !== nothing ? b2 = P.Pr * z : b2 = z
 ```
@@ -85,14 +84,18 @@ Not complete, but some useful points about the code structure.
 ### File hierachy
 
 1. `src/types.jl` : Define types like SolverMethod, PreconditionerMethod, SolverDiagnostics
-2. `src/preconditioners/` : Implementations of various preconditioners, each file is independent but grouped by similar types e.g. diagonal preconditioners, incomplete factorization, block decompositions, ...
-3. `src/preconditioner_interface.jl` : Interface functions to call preconditioners, e.g. `preconMethod = get_preconditioner(:jacobi)`
-4. `src/solvers/` : Implementations of various solvers, each solver package (Krylov.jl, IterativeSolvers.jl, ..) is loaded only here not in the interface
-5. `src/solver_interface.jl` : Interface functions to call solvers with preconditioning
-6. `src/preconditioners/` : Implementations of various preconditioners
-7. `src/benchmarking/` : Scripts to benchmark different solver-preconditioner combinations
+2. `src/preconditioner_interface.jl` : Interface functions that handels the `preconditioner_registry`
+3. `src/preconditioners/` : Implementations of various preconditioners, each file is independent but grouped by similar types e.g. diagonal preconditioners, incomplete factorization, block decompositions, ...
+4. `src/solver_interface.jl` : handels the `solver_registry`
+5. `src/solvers/` : Implementations of various solvers, each solver package (Krylov.jl, IterativeSolvers.jl, ..) is loaded only here not in the interface
+6. `solve_with_preconditioner()`: the main + auxilary functions. Does 1. compatiability checks on solver-precond. pairs + settings 2. construct normal eq. 3. apply the preconditioner 4. call solve 5. undo right precond. if needed and 6. collects results. 
+7. `src/benchmarking/` : utility scripts for benchmarking
+8. `src/utils/`: mainly some plotting function
+
+9. `notebooks/`: pluto notebooks with some background info, how tos and results analysis.
+10. `scripts`: scripts to run benchmarks, and a test script to use solve_with_preconditioner as custom solver function for Unfold.
+
 
 ### Adding new solvers/preconditioners
 create a new method struct (see types.jl) with the corresponding setup or solve functions.
 for each individual preconditoner/solver file exists a small registry/dict that maps a symbol to the method struct. These are merged in the interfaces. 
-
