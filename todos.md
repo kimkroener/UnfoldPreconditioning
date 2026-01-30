@@ -82,7 +82,7 @@
 - fix AMG precond. for dense systems -> assume all matrices are sparse. 
 - put all checks into one funcition: info = check_compatibility(solver_meth, precon_meth, typeof(X)) -> info.solve_normal; info.switch_to_sparse, info.compute_on_gpu_solver, compute_on_gpu_precond? **done**
 - fix dimension of data in the simulation + solve_with_precon
-
+8, how to save pluto notebooks such that they can be inspected without being run? 
 
 ## Key Questions
 - update test cases in simulate_data.jl with new unfold methods **done** (dense test fail (as expected)  and a lot of manually applied precond. too :/)
@@ -168,6 +168,7 @@
 - add a assumptions property to the solvers, e.g. symmetric, pos. definite. -> influence on precision/accuarcy? 
 - solvers that calculate std error internally? 
 - linear maps?! -> ignore for now
+- better error handling -> pass typeof(e) and dont print the full error message. 
 
 ## cleanup
 - docstrings -> code coverage feature? 

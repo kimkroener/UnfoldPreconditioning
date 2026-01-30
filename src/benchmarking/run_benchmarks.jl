@@ -1,3 +1,6 @@
+# be warned, when running run_benchmarks_full_solve, the error handling is not the best, therefore the output will be quite verbose
+using Dates
+
 function struct_to_namedtuple(res::SolverBenchmarkInfo)
 	tuple = NamedTuple{propertynames(res)}(getproperty.(Ref(res), propertynames(res)))
 	return tuple

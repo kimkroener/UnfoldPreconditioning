@@ -70,6 +70,11 @@ md"""
 Without furhter ado, here are the 30 fasted solver-preconditioner pairs for the testcase "small" with 128 channels, sorted by the minimum(residual_norm):
 """
 
+# ╔═╡ 09ea6e49-8a0a-43af-b3e4-a5386180f91a
+WideCell(md"""
+Top 30 (by median_solve_time) combinations for testcase small + 128 channels, sorted by min residual norm:
+""")
+
 # ╔═╡ fa139f72-21b5-42e7-9519-63f7d46e04c5
 md"""
 ## 0. Setup
@@ -942,7 +947,7 @@ function rank_solver_precond_pair(df::DataFrame,
 	df_sorted = sort(df_nch, metric)
 	df_sorted.rank = 1:nrow(df_sorted)
 	df_ranked = select(df_sorted[1:2:end,:], :rank, :solver, :preconditioner, metric,
-					   :residual_norm, :solve_normal_equation)
+					   :residual_norm, :solve_normal_equation) # somehow this dataset contains every combi twice
 
 	return df_ranked
 end
@@ -960,7 +965,7 @@ begin
 end
 
 # ╔═╡ 788effc3-777c-4b62-8fdc-795439e7e8ba
-sort(first(df_ranked, 30), :residual_norm)
+WideCell(sort(first(df_ranked, 30), :residual_norm))
 
 # ╔═╡ 167fdbac-8af0-44fa-b933-66e60caf73b8
 begin
@@ -1041,6 +1046,7 @@ end
 # ╟─7c0828ed-0fe6-4a43-9661-5937f53910c6
 # ╟─1b169c9e-d700-4dc5-8b68-a3b86013e603
 # ╟─aff52bd0-6859-499c-9331-2070ffcf1cc9
+# ╟─09ea6e49-8a0a-43af-b3e4-a5386180f91a
 # ╠═788effc3-777c-4b62-8fdc-795439e7e8ba
 # ╟─167fdbac-8af0-44fa-b933-66e60caf73b8
 # ╟─fa139f72-21b5-42e7-9519-63f7d46e04c5
@@ -1048,7 +1054,7 @@ end
 # ╠═daf1b755-30b3-4ace-a010-e85009c28188
 # ╠═85f80c29-f9d8-4203-a66d-2157871a1998
 # ╟─42adb682-00f5-455f-8b6b-e2c331e0fe39
-# ╠═c826843d-9a5a-406a-aee9-689736229fe7
+# ╟─c826843d-9a5a-406a-aee9-689736229fe7
 # ╠═a9969af8-b4ad-4c65-b1c0-87b1560384c4
 # ╟─15586790-70a7-4b1b-be57-5aee23eb4241
 # ╠═1bf28e17-4ae2-4a67-a1ab-c6523bcff3e0
@@ -1109,5 +1115,5 @@ end
 # ╟─1244c2e9-27db-4b3e-9b06-4be0f2083103
 # ╠═c893600b-020c-482b-9284-f3a34deb7c9a
 # ╠═bc3b35d5-4271-4565-bad2-2c1b07dbbd04
-# ╠═a2d23441-a0e6-49f3-a76b-5e46eab04747
+# ╟─a2d23441-a0e6-49f3-a76b-5e46eab04747
 # ╟─f724ce3a-150d-44a7-900a-794315df91f3

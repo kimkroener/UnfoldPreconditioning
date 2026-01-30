@@ -26,6 +26,10 @@ using LDLFactorizations
 # utils 
 using Random
 using CairoMakie
+using BenchmarkTools
+using DataFrames
+using CSV
+using Dates
 
 include("types.jl")
 
