@@ -175,6 +175,7 @@ function simulate_data(testcase::String = "small";
 
 	# single vector -> multichannel [n_ch, datapoints]
 	data = repeat(data, 1, n_channels)' .+ 0.5*randn(rng, n_channels, datapoints) # in µV
+	data = data' # [datapoints, n_ch]
 
 	# extract the term ranges from the model, such that we know the structure of X=[X_intercept_event1 | X_condition_event1 | X_splines_event1 | X_intercept_event2 | ...]
 	# to be used e.g. for block-based preconditioning
@@ -243,12 +244,12 @@ function create_linear_system(testcase::String = "small"; rng = MersenneTwister(
 		X = randn(rng, n, m);
 		b_true = randn(rng, m);
 		y = X * b_true;
-		b_true = reshape(b_true, 1, :)
-		y = reshape(y, 1, :)
+		b_true = reshape(b_true, :, 1)
+		y = reshape(y, :, 1)
 
 		if n_channels > 1
-			y = repeat(y, n_channels, 1)
-			b_true = repeat(b_true, n_channels, 1)
+			y = repeat(y,  1, n_channels)
+			b_true = repeat(b_true, 1, n_channels)
 		end
 
 		return X, y, b_true 
@@ -259,12 +260,12 @@ function create_linear_system(testcase::String = "small"; rng = MersenneTwister(
 		X = sprand(n, m, 0.7);
 		b_true = randn(rng, m);
 		y = X * b_true
-		b_true = reshape(b_true, 1, :)
-		y = reshape(y, 1, :)
+		b_true = reshape(b_true, :, 1)
+		y = reshape(y, :, 1)
 
 		if n_channels > 1
-			y = repeat(y, n_channels, 1)
-			b_true = repeat(b_true, n_channels, 1)
+			y = repeat(y,  1, n_channels)
+			b_true = repeat(b_true, 1, n_channels)
 		end
 
 	return X, y, b_true 
@@ -310,12 +311,12 @@ function get_test_data(;testcase="test_sparse", rng = MersenneTwister(1234), n_c
 	end
 
 	# make sure b_true and y has shape [1, :] for consistency with unfold sim
-	b_true = reshape(b_true, 1, :)
-	y = reshape(y, 1, :)
+	b_true = reshape(b_true, :, 1)
+	y = reshape(y, :, 1)
 
 	if n_channels > 1
-		y = repeat(y, n_channels, 1)
-		b_true = repeat(b_true, n_channels, 1)
+		y = repeat(y,  1, n_channels)
+		b_true = repeat(b_true, 1, n_channels)
 	end
 
 	return X, y, b_true 

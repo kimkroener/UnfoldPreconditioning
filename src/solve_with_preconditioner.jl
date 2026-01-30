@@ -402,12 +402,10 @@ function solve_with_preconditioner(
 	if ndims(data) == 1
 		data = reshape(data, 1, :) # make it 2d with one channel
 	end
-	n_channels, n_timepoints_data = size(data)
+    n_timepoints_data, n_channels = size(data)
 	n_timepoints_X, n_regressors = size(X)
 	@assert n_timepoints_data == n_timepoints_X "Number of timepoints in data ($(n_timepoints_data)) must match number of rows in X ($(n_timepoints_X))."
 
-	# transpose to [n_timepoints, n_channels] for linear algebra notation
-	data = data'
 
 	# 0. get methods, check compatability and settings
 	sm = get_solver(solver)
@@ -481,10 +479,6 @@ function solve_with_preconditioner(
 	if !isnothing(Pr_applied)
 		B, success = undo_right_preconditioning(B, Pr_applied; ldiv = pm.properties.ldiv)
 	end
-
-
-	# transpose B to have shape [n_channels, n_features] like data input
-	B = B' # [n_channels, n_features] for unfold notation
 
     if return_checks
         return B, diagnostics, checks
