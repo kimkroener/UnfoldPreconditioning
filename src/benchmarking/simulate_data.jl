@@ -14,7 +14,7 @@ const testcases_available = [
 	"high_noise",
 	"custom",
 	"test_dense",
-	"test_sparse",]
+	"test_sparse"]
 
 function list_testcases()
 	println("Available testcases for simulate_data():")
@@ -248,11 +248,11 @@ function create_linear_system(testcase::String = "small"; rng = MersenneTwister(
 		y = reshape(y, :, 1)
 
 		if n_channels > 1
-			y = repeat(y,  1, n_channels)
+			y = repeat(y, 1, n_channels)
 			b_true = repeat(b_true, 1, n_channels)
 		end
 
-		return X, y, b_true 
+		return X, y, b_true
 
 	elseif testcase=="test_sparse"
 		n=1500
@@ -264,11 +264,11 @@ function create_linear_system(testcase::String = "small"; rng = MersenneTwister(
 		y = reshape(y, :, 1)
 
 		if n_channels > 1
-			y = repeat(y,  1, n_channels)
+			y = repeat(y, 1, n_channels)
 			b_true = repeat(b_true, 1, n_channels)
 		end
 
-	return X, y, b_true 
+		return X, y, b_true
 
 
 	else
@@ -293,7 +293,7 @@ function create_linear_system(testcase::String = "small"; rng = MersenneTwister(
 end
 
 
-function get_test_data(;testcase="test_sparse", rng = MersenneTwister(1234), n_channels=1) 
+function get_test_data(; testcase = "test_sparse", rng = MersenneTwister(1234), n_channels = 1)
 	X, y, b_true = nothing, nothing, nothing
 	if testcase == "test_dense"
 		n, m = 50, 20
@@ -315,9 +315,9 @@ function get_test_data(;testcase="test_sparse", rng = MersenneTwister(1234), n_c
 	y = reshape(y, :, 1)
 
 	if n_channels > 1
-		y = repeat(y,  1, n_channels)
+		y = repeat(y, 1, n_channels)
 		b_true = repeat(b_true, 1, n_channels)
 	end
 
-	return X, y, b_true 
+	return X, y, b_true
 end

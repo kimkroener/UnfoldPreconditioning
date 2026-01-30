@@ -37,24 +37,24 @@ for n_ch in n_channels
 end
 
 #tune!(suite)
-results = run(suite; seconds=0.1)
+results = run(suite; seconds = 0.1)
 BenchmarkTools.save("solver_precond_benchmarks.json", results)
 
 # analayse results
 n_ch = 64
-fig = plot_solver_preconditioner_heatmap(results[n_ch], 
-    solvers, 
-    preconditioners, 
-    cmap_times=Reverse(:viridis), 
-    cmap_memory=Reverse(:viridis), 
-    nan_color=:white,
-    title="Tescase $testcase with $n_ch channels"
-    )
+fig = plot_solver_preconditioner_heatmap(results[n_ch],
+	solvers,
+	preconditioners,
+	cmap_times = Reverse(:viridis),
+	cmap_memory = Reverse(:viridis),
+	nan_color = :white,
+	title = "Tescase $testcase with $n_ch channels",
+)
 
 
 
 
-    # select two specific results for judgement
+# select two specific results for judgement
 nch = 64
 m1 = median(results[nch]["lsmr"]["none"])
 m2 = median(results[nch]["klu"]["col"])
@@ -67,16 +67,16 @@ verdicts = Dict()
 n_ch = 128
 baseline = median(results[n_ch]["cg"]["none"])
 for s in solvers
-    for p in preconditioners
-        if haskey(results, n_ch) && haskey(results[n_ch], String(s)) && haskey(results[n_ch][String(s)], String(p))
-            median_trial = median(results[n_ch][String(s)][String(p)])
-            verdicts["$s + $p"] = judge(median_trial, baseline)
-        end
-    end
+	for p in preconditioners
+		if haskey(results, n_ch) && haskey(results[n_ch], String(s)) && haskey(results[n_ch][String(s)], String(p))
+			median_trial = median(results[n_ch][String(s)][String(p)])
+			verdicts["$s + $p"] = judge(median_trial, baseline)
+		end
+	end
 end
 
 for (s, v) in verdicts
-    println("$s: $v")
+	println("$s: $v")
 end
 
 

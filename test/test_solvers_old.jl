@@ -8,12 +8,12 @@ using Random
 
 function create_system(n, m; sparse = false)
 	Random.seed!(1234)
-	
-    if sparse
-        X = sprandn(n, m, 0.9)
-    else
-        X = randn(n, m)
-    end
+
+	if sparse
+		X = sprandn(n, m, 0.9)
+	else
+		X = randn(n, m)
+	end
 
 	β_true = randn(m)
 	y = X * β_true

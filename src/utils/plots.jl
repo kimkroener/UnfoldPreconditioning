@@ -12,10 +12,10 @@ Assumes a benchmarktools.BenchmarkGroup with suite["solver_name"]["preconditione
 """
 function plot_solver_preconditioner_heatmap(benchmark_results, solvers, preconds;
 	cmap_times = :cividis,
-    cmap_memory = :plasma,
-    nan_color = :gray80, 
-    title = nothing, 
-    )
+	cmap_memory = :plasma,
+	nan_color = :gray80,
+	title = nothing,
+)
 
 	median_times = fill(NaN, length(solvers), length(preconds))
 	median_memories = fill(NaN, length(solvers), length(preconds))
@@ -36,8 +36,8 @@ function plot_solver_preconditioner_heatmap(benchmark_results, solvers, preconds
 	end
 
 	fig = Figure(size = (800, 800))
-     
-    
+
+
 	# valid color ranges for log scale
 	valid_times = filter(x -> isfinite(x) && x > 0, vec(median_times))
 	min_time = isempty(valid_times) ? 1e-9 : minimum(valid_times)
@@ -75,7 +75,7 @@ function plot_solver_preconditioner_heatmap(benchmark_results, solvers, preconds
 
 	# memory
 	ax2 = Axis(
-		fig[2,1],
+		fig[2, 1],
 		title = "Median Memory (MB)",
 		ylabel = "Preconditioners",
 		xlabel = "Solvers",
@@ -95,9 +95,9 @@ function plot_solver_preconditioner_heatmap(benchmark_results, solvers, preconds
 	ax2.xticks = (1:length(solvers), String.(solvers))
 	Colorbar(fig[2, 2], hm_memories; label = "Memory (MB)", colorrange = memory_range)
 
-    if title !== nothing
-        fig[0, :] = Label(fig, title; fontsize = 20, halign = :center)
-    end
+	if title !== nothing
+		fig[0, :] = Label(fig, title; fontsize = 20, halign = :center)
+	end
 
 	fig
 end

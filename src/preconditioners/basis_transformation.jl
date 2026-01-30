@@ -15,14 +15,14 @@ function setup_maxvol_preconditioner(X::SparseMatrixCSC)
 		Xᴴ = sparse(X')  # Hermitian transpose
 		#basis, B = BasicLU.maxvolbasis(Xᴴ, lindeptol = lindeptol, volumetol = volumetol, maxpass = maxpass)
 
-		basis, factorization = BasicLU.maxvolbasis(Xᴴ, verbose=false)
+		basis, factorization = BasicLU.maxvolbasis(Xᴴ, verbose = false)
 
 		#opX = LinearOperator(X)
-		B⁻ᴴ = LinearOperator(Float64, n, n, false, false, 
+		B⁻ᴴ = LinearOperator(Float64, n, n, false, false,
 			(y, v) -> (y .= v; BasicLU.solve!(factorization, y, 'T')),
 			(y, v) -> (y .= v; BasicLU.solve!(factorization, y, 'N')),
 			(y, v) -> (y .= v; BasicLU.solve!(factorization, y, 'N')))
-		
+
 		# convert B to a sparse matrix to avoid issues with various solve backends
 		B⁻ᴴ = sparse(Matrix((B⁻ᴴ)))
 
@@ -45,7 +45,7 @@ maxvol_pm = PreconditionerMethod(
 		ldiv = false,
 		supports_sparse = true,
 		supports_dense = false,
-		supported_backends=Set()   # always apply manually TODO needs more tests 
+		supported_backends = Set()   # always apply manually TODO needs more tests 
 	),
 	"Maximum-volume column subset preconditioner",
 	"https://jso.dev/Krylov.jl/stable/preconditioners/, https://jso.dev/BasicLU.jl/stable/",

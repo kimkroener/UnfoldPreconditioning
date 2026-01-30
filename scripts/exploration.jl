@@ -16,7 +16,7 @@ using LimitedLDLFactorizations
 X, data, sim_info, ufmodel = create_linear_system("small"; n_channels = 1);
 opts = SolverOptions(verbose = false);
 b_internal, _ = solve_with_preconditioner(X, data; solver = :internal, preconditioner = :none, options = opts);
-b_internal2, res = solve_with_preconditioner_benchmark(X, data; solver = :lsmr, preconditioner=:none)
+b_internal2, res = solve_with_preconditioner_benchmark(X, data; solver = :lsmr, preconditioner = :none)
 b_ref = b_internal[1, :]
 
 # ----
@@ -27,10 +27,10 @@ n_timepoints_X, n_regressors = size(X)
 @assert n_timepoints_data == n_timepoints_X
 
 
-b, res = solve_with_preconditioner_benchmark(X, data; solver = :cg_iterative, preconditioner=:none, seconds_per_benchmark=1.0)
+b, res = solve_with_preconditioner_benchmark(X, data; solver = :cg_iterative, preconditioner = :none, seconds_per_benchmark = 1.0)
 
 function benchmarkinfo_to_dfrow(s::SolverBenchmarkInfo)
-    NamedTuple{propertynames(s)}(getproperty.(Ref(s), propertynames(s)))
+	NamedTuple{propertynames(s)}(getproperty.(Ref(s), propertynames(s)))
 end
 
 df_row = benchmarkinfo_to_dfrow(res)
@@ -47,7 +47,7 @@ b, _ = solve_with_preconditioner(X, data; solver = :cg_iterative, preconditioner
 # ----
 
 for s in list_solvers()
-    b, _ = solve_with_preconditioner(X, data; solver = s, preconditioner = :none, options = opts);
+	b, _ = solve_with_preconditioner(X, data; solver = s, preconditioner = :none, options = opts);
 end
 
 
@@ -73,7 +73,7 @@ for backend in [:IterativeSolvers]
 		for precond in preconditioners_cpu
 			println("$solver with $precond")
 
-            b, diag = solve_with_preconditioner(X, data; solver = solver, preconditioner = precond);
+			b, diag = solve_with_preconditioner(X, data; solver = solver, preconditioner = precond);
 
 			success = true
 			if diag.converged == false

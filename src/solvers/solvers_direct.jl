@@ -64,50 +64,50 @@ end
 
 
 
-function solve_internal(X, y; options=SolverOptions(), kwargs...)	
+function solve_internal(X, y; options = SolverOptions(), kwargs...)
 	solve_fn = (X, y) -> X \ y
-	return solve_direct(X, y, solve_fn; options=options, solver_name=:internal)
+	return solve_direct(X, y, solve_fn; options = options, solver_name = :internal)
 end
 
-function solve_qr(X, y; options=SolverOptions(), kwargs...)
+function solve_qr(X, y; options = SolverOptions(), kwargs...)
 	solve_fn = (X, y) -> qr(X) \ y
-	return solve_direct(X, y, solve_fn; options=options, solver_name=:qr)
+	return solve_direct(X, y, solve_fn; options = options, solver_name = :qr)
 end
 
-function solve_cholesky(X, y; options=SolverOptions(), kwargs...)
+function solve_cholesky(X, y; options = SolverOptions(), kwargs...)
 	solve_fn = (X, y) -> cholesky(X) \ y
-	return solve_direct(X, y, solve_fn; options=options, solver_name=:cholesky)
+	return solve_direct(X, y, solve_fn; options = options, solver_name = :cholesky)
 end
 
-function solve_lu(X, y; options=SolverOptions(), kwargs...)
+function solve_lu(X, y; options = SolverOptions(), kwargs...)
 	solve_fn = (X, y) -> lu(X) \ y
-	return solve_direct(X, y, solve_fn; options=options, solver_name=:lu)
+	return solve_direct(X, y, solve_fn; options = options, solver_name = :lu)
 end
 
-function solve_ldlt(X, y; options=SolverOptions(), kwargs...)
-	if !issparse(X) 
-		X = Symmetric(X) 
-	end 
-	
+function solve_ldlt(X, y; options = SolverOptions(), kwargs...)
+	if !issparse(X)
+		X = Symmetric(X)
+	end
+
 	solve_fn = (X, y) -> ldlt(X) \ y
-	return solve_direct(X, y, solve_fn; options=options, solver_name=:ldlt)
+	return solve_direct(X, y, solve_fn; options = options, solver_name = :ldlt)
 end
 
-function solve_ldl(X, y; options=SolverOptions(), kwargs...)
+function solve_ldl(X, y; options = SolverOptions(), kwargs...)
 	solve_fn = (X, y) -> LDLFactorizations.ldl(X) \ y
-	return solve_direct(X, y, solve_fn; options=options, solver_name=:ldl)
+	return solve_direct(X, y, solve_fn; options = options, solver_name = :ldl)
 end
 
-function solve_klu(X, y; options=SolverOptions(), kwargs...)
+function solve_klu(X, y; options = SolverOptions(), kwargs...)
 	solve_fn = (X, y) -> begin
 		F = KLU.klu(issparse(X) ? X : sparse(X)) # ensure its sparse 
 		KLU.solve(F, y)
 	end
-	return solve_direct(X, y, solve_fn; options=options, solver_name=:klu)
+	return solve_direct(X, y, solve_fn; options = options, solver_name = :klu)
 end
 
 
-function solve_pinv(X, y; options=SolverOptions(), kwargs...)
+function solve_pinv(X, y; options = SolverOptions(), kwargs...)
 	solve_fn = (X, y) -> begin
 		if issparse(X)
 			@warn "Converting sparse matrix to dense for pinv solver. This may be inefficient."
@@ -116,7 +116,7 @@ function solve_pinv(X, y; options=SolverOptions(), kwargs...)
 		rtol = sqrt(eps(real(float(oneunit(eltype(X_dense))))))
 		pinv(X_dense; rtol = rtol) * y
 	end
-	return solve_direct(X, y, solve_fn; options=options, solver_name=:pinv)
+	return solve_direct(X, y, solve_fn; options = options, solver_name = :pinv)
 end
 
 
@@ -125,8 +125,8 @@ internal_sm = SolverMethod(
 	solve_internal,
 	SolverProperties(
 		supports_rectangular_matrices = true,
-		supports_left_preconditioning = false,   
-		supports_right_preconditioning = false,  
+		supports_left_preconditioning = false,
+		supports_right_preconditioning = false,
 		iterative_solver = false,
 		supports_sparse = true,
 		supports_dense = true,

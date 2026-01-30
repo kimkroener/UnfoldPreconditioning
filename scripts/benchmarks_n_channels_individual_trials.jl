@@ -26,39 +26,39 @@ results_dir = "../data/benchmark_testcase_small/"
 mkpath(results_dir)
 
 function result_to_dfrow(res::SolverBenchmarkInfo)
-    tuple = NamedTuple{propertynames(res)}(getproperty.(Ref(res), propertynames(res)))
-    return tuple 
+	tuple = NamedTuple{propertynames(res)}(getproperty.(Ref(res), propertynames(res)))
+	return tuple
 end
 
 global count = 0
 global results_nch = []
 n_runs = length(solvers) * length(preconditioners) * length(n_channels) * length(testcase)
 for nch in n_channels
-    X, data, info, _ = create_linear_system(testcase[1]; n_channels = nch);
-    for solver in solvers
-        results_nch = []
-        for preconditioner in preconditioners
-            count += 1
-            println("($count/$n_runs, nch=$nch) $solver with $preconditioner")
-            try 
-                b, res_i = solve_with_preconditioner_benchmark(X, data; solver = solver, preconditioner=preconditioner, seconds_per_benchmark=0.5)
-                res_dfrow = result_to_dfrow(res_i)    
-                push!(results_nch, res_dfrow)
-            catch
-                @warn "Solver $solver with preconditioner $preconditioner failed for $nch channels."
-            end
-        end
-        filename = joinpath(results_dir, "bm_$(testcase[1])_nch$(nch)_$(solver)_$(Dates.format(Dates.now(), "yyyy-mm-dd_HHMM")).csv")
-        df = DataFrame(results_nch)
-        CSV.write(filename, df)
-        println("Wrote results to $filename")
-    end
+	X, data, info, _ = create_linear_system(testcase[1]; n_channels = nch);
+	for solver in solvers
+		results_nch = []
+		for preconditioner in preconditioners
+			count += 1
+			println("($count/$n_runs, nch=$nch) $solver with $preconditioner")
+			try
+				b, res_i = solve_with_preconditioner_benchmark(X, data; solver = solver, preconditioner = preconditioner, seconds_per_benchmark = 0.5)
+				res_dfrow = result_to_dfrow(res_i)
+				push!(results_nch, res_dfrow)
+			catch
+				@warn "Solver $solver with preconditioner $preconditioner failed for $nch channels."
+			end
+		end
+		filename = joinpath(results_dir, "bm_$(testcase[1])_nch$(nch)_$(solver)_$(Dates.format(Dates.now(), "yyyy-mm-dd_HHMM")).csv")
+		df = DataFrame(results_nch)
+		CSV.write(filename, df)
+		println("Wrote results to $filename")
+	end
 end
 
 
 # load and combine all results that are stored in results_dir
-csv_files = filter(f -> endswith(f, ".csv"), readdir(results_dir, join=true))
-df = vcat([CSV.read(f, DataFrame; normalizenames=true) for f in csv_files]...)
+csv_files = filter(f -> endswith(f, ".csv"), readdir(results_dir, join = true))
+df = vcat([CSV.read(f, DataFrame; normalizenames = true) for f in csv_files]...)
 
 # and safe again as a single file
 filename_all = joinpath(results_dir, "bm_$(testcase[1])_nchannels-$(join(n_channels, "-")).csv")

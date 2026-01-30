@@ -21,7 +21,7 @@ function diagnostics_krylov(X, y, beta, stats)
 	)
 end
 
-function solve_lsmr(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv=false, options=SolverOptions(), kwargs...)
+function solve_lsmr(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv = false, options = SolverOptions(), kwargs...)
 	Pl = isnothing(Pl) ? I : Pl
 	Pr = isnothing(Pr) ? I : Pr
 
@@ -41,7 +41,7 @@ function solve_lsmr(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv=false, 
 	return b, diagnostics_krylov(X, y, b, stats)
 end
 
-function solve_lsqr(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv=false, options=SolverOptions(), kwargs...)
+function solve_lsqr(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv = false, options = SolverOptions(), kwargs...)
 	Pl = isnothing(Pl) ? I : Pl
 	Pr = isnothing(Pr) ? I : Pr
 
@@ -61,7 +61,7 @@ function solve_lsqr(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv=false, 
 	return b, diagnostics_krylov(X, y, b, stats)
 end
 
-function solve_minres_krylov(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv=false,  options = SolverOptions(), kwargs...)
+function solve_minres_krylov(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv = false, options = SolverOptions(), kwargs...)
 	Pl = isnothing(Pl) ? I : Pl
 
 	solver_kwargs = (
@@ -80,7 +80,7 @@ function solve_minres_krylov(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldi
 	return b, diagnostics_krylov(X, y, b, stats)
 end
 
-function solve_cgls(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv=false, options = SolverOptions(), kwargs...)
+function solve_cgls(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv = false, options = SolverOptions(), kwargs...)
 	Pl = isnothing(Pl) ? I : Pl
 
 	solver_kwargs = (
@@ -100,7 +100,7 @@ function solve_cgls(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv=false, 
 end
 
 
-function solve_lslq(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv=false, options = SolverOptions(), kwargs...)
+function solve_lslq(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv = false, options = SolverOptions(), kwargs...)
 	Pl = isnothing(Pl) ? I : Pl
 
 	solver_kwargs = (
@@ -140,7 +140,7 @@ function solve_crls(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv = true,
 end
 
 
-function solve_gmres_krylov(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv=false, options = SolverOptions(), kwargs...)
+function solve_gmres_krylov(X, y; Pl = nothing, Pr = nothing, b0 = nothing, ldiv = false, options = SolverOptions(), kwargs...)
 
 	if isnothing(Pl)
 		Pl = I
@@ -704,4 +704,4 @@ register_solver_method!(diom_sm)
 register_solver_method!(dqgmres_sm)
 register_solver_method!(cgls_lanczos_sm)
 register_solver_method!(block_minres_sm)
-register_solver_method!(block_gmres_sm) 
+register_solver_method!(block_gmres_sm)

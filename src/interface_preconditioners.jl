@@ -5,7 +5,8 @@ function register_preconditioner_method!(method::PreconditionerMethod)
 	if haskey(preconditioner_registry, method.name)
 		@warn "A methods with the name $(method.name) is already included in the preconditioner map. Overwrite? (y/n)"
 		answer = readline()
-		if lowercase(answer) not in ["y", "yes"]
+		if lowercase(answer)
+			not in ["y", "yes"]
 			println("Skipping registration of preconditioner method: $(method.name)")
 			return nothing
 		else
@@ -32,7 +33,7 @@ function filter_preconditioners(
 	list_info = false,
 )
 
-	valid_properties = fieldnames(PreconditionerProperties)  
+	valid_properties = fieldnames(PreconditionerProperties)
 
 	if isnothing(property)
 		return collect(keys(preconditioner_registry))
@@ -76,20 +77,20 @@ end
 # add :none preconditioner
 
 no_preconditioner = PreconditionerMethod(
-    :none,
-    (X; kwargs...) -> (nothing, nothing),
-    PreconditionerProperties(
-        side = :both,
-        ldiv = false,
-        supported_backends = Set([:all]),
-        supports_sparse = true,
-        supports_dense = true,
-        supports_gpu = false,
-        supports_cpu = true,
-        supports_multithreading = false,
-    ),
-    "No preconditioning",
-    "-",
+	:none,
+	(X; kwargs...) -> (nothing, nothing),
+	PreconditionerProperties(
+		side = :both,
+		ldiv = false,
+		supported_backends = Set([:all]),
+		supports_sparse = true,
+		supports_dense = true,
+		supports_gpu = false,
+		supports_cpu = true,
+		supports_multithreading = false,
+	),
+	"No preconditioning",
+	"-",
 )
 
 preconditioner_registry[:none] = no_preconditioner

@@ -76,7 +76,7 @@ struct PreconditionerProperties
 	supports_cpu::Bool
 	supports_multithreading::Bool
 end
-function PreconditionerProperties(; 
+function PreconditionerProperties(;
 	supports_rectangular_matrices = true,
 	side = :none,
 	ldiv = false,
@@ -213,9 +213,9 @@ struct SolverBenchmarkInfo
 	median_memory_solver_in_mb::Float64
 
 	# flatten SolverDiagnostics fields
-	residual_norm
-	iterations
-	converged	
+	residual_norm::Any
+	iterations::Any
+	converged::Any
 end
 
 function SolverBenchmarkInfo(;

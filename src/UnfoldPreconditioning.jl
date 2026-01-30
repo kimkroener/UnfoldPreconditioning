@@ -66,6 +66,6 @@ export create_unfold_solver
 
 
 export plot_solver_preconditioner_heatmap
-export plot_model_matrix, preview_eeg_data 
+export plot_model_matrix, preview_eeg_data
 
 end # module
