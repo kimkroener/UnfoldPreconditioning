@@ -49,7 +49,7 @@ include("solve_with_preconditioner.jl")
 include("create_unfold_solver.jl")
 
 include("benchmarking/simulate_data.jl")
-
+include("benchmarking/run_benchmarks.jl")
 include("utils/visualizeUnfold.jl")
 include("utils/plots.jl")
 
@@ -61,6 +61,7 @@ export check_solver_preconditioner_compatibility, switch_to_normal_equations
 export solve_with_preconditioner, solve_with_preconditioner_benchmark, solve_with_preconditioner_benchmark_full
 export summerize_benchmark_info, fullfills_symmetric_requirement, check_preconditioning_support
 
+export run_benchmarks_full_solve, run_benchmarks_individual_trials
 export create_linear_system, create_solver_fun, simulate_data, extract_term_ranges, get_test_data, testcases_available
 export create_unfold_solver
 
