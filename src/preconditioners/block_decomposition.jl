@@ -25,7 +25,9 @@ block_jacobi_krylov_pm = PreconditionerMethod(
 		supports_sparse = true,
 		supports_dense = false, # ! 
 		supports_gpu = true,
-		supported_backends = Set([:Krylov]) # IterativeSolvers requries ldiv=true 
+		supported_backends = Set([:Krylov]),  # IterativeSolvers requries ldiv=true 
+		backend = :KrylovPreconditioners,
+		type = :block_decomposition,
 	),
 	"Block-jacobi preconditioner implemented as a `Overlapping-Schwarz preconditioner` by KrylovPreconditioners.jl; Dynamically chooses block size; has GPU support.",
 	"https://jso.dev/KrylovPreconditioners.jl/dev/krylov_preconditioners/",

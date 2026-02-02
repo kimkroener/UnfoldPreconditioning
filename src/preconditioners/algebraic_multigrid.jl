@@ -38,6 +38,8 @@ ruge_stuben_pm = PreconditionerMethod(
 		supports_sparse = true,
 		supports_dense = false, # optimized for sparse
 		supported_backends = Set([:Krylov, :IterativeSolvers]),
+		backend = :AlgebraicMultigrid,
+		type = :algebraic_multigrid,
 	),
 	"Ruge-Stuben algebraic multigrid preconditioner using AlgebraicMultigrid.jl",
 	"https://github.com/JuliaLinearAlgebra/AlgebraicMultigrid.jl",
@@ -54,6 +56,8 @@ smoothed_aggregation_pm = PreconditionerMethod(
 		supports_sparse = true,
 		supports_dense = false, # optimized for sparse
 		supported_backends = Set([:Krylov, :IterativeSolvers]),
+		backend = :AlgebraicMultigrid,
+		type = :algebraic_multigrid,
 	),
 	"Smoothed aggregation algebraic multigrid preconditioner using AlgebraicMultigrid.jl",
 	"https://github.com/JuliaLinearAlgebra/AlgebraicMultigrid.jl",

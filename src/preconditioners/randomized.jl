@@ -37,7 +37,9 @@ nystrom_pm = PreconditionerMethod(
         ldiv=true,
         supports_sparse=true, # converts to dense
         supports_dense=true,
-        supported_backends=Set([:Krylov, :IterativeSolvers])
+        supported_backends=Set([:Krylov, :IterativeSolvers]),
+        backend = :RandomizedPreconditioners,
+        type = :random,
     ),
     "Randomized Nyström preconditioner P ≈ A + μI for symmetric positive (semi-)definite systems. Uses low-rank approximation via randomized sketching.",
     "https://github.com/tjdiamandis/RandomizedPreconditioners.jl"
@@ -58,7 +60,9 @@ nystrom_inv_pm = PreconditionerMethod(
         ldiv=false, 
         supports_sparse=true, # converts to dense
         supports_dense=true,
-        supported_backends=Set([:Krylov])
+        supported_backends=Set([:Krylov]),
+        backend = :RandomizedPreconditioners,
+        type = :random,
     ),
     "Inverse of the randomized Nyström preconditioner P⁻¹ ≈ (A + μI)⁻¹. Applies via multiplication (mul!) rather than solve.",
     "https://github.com/tjdiamandis/RandomizedPreconditioners.jl"
@@ -125,7 +129,9 @@ nystrom_sketch_pm = PreconditionerMethod(
         ldiv=true,
         supports_sparse=true,
         supports_dense=true,
-        supported_backends=Set([:all])
+        supported_backends=Set([:all]),
+        backend = :RandomizedPreconditioners,
+        type = :random,
     ),
     "Nyström sketch-based preconditioner. First constructs low-rank sketch Â ≈ A, then uses it for preconditioning",
     "https://github.com/tjdiamandis/RandomizedPreconditioners.jl"

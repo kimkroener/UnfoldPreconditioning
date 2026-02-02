@@ -45,7 +45,9 @@ maxvol_pm = PreconditionerMethod(
 		ldiv = false,
 		supports_sparse = true,
 		supports_dense = false,
-		supported_backends = Set()   # always apply manually TODO needs more tests 
+		supported_backends = Set(), 
+		type = :basis_transformation,
+		backend = :BasicLU,
 	),
 	"Maximum-volume column subset preconditioner",
 	"https://jso.dev/Krylov.jl/stable/preconditioners/, https://jso.dev/BasicLU.jl/stable/",

@@ -21,6 +21,8 @@ ilu_krylov_pm = PreconditionerMethod(
 		supports_gpu = true,
 		supports_cpu = false,
 		supported_backends = Set([:Krylov]),
+		backend = :KrylovPreconditioners,
+		type = :incomplete_factorization,
 	),
 	"incomplete LU factorization with zero fill-in (ILU(0)) preconditioner using KrylovPreconditioners.jl for GPUs",
 	"https://jso.dev/KrylovPreconditioners.jl/dev/krylov_preconditioners/",
@@ -46,7 +48,9 @@ ic0_krylov_pm = PreconditionerMethod(
 		supports_dense = false,
 		supports_gpu = true,
 		supports_cpu = false,
-		supported_backends = Set([:Krylov]) # need to figure out how to overwrite ldiv and/or mul! 
+		supported_backends = Set([:Krylov]),
+		backend = :KrylovPreconditioners,
+		type = :incomplete_factorization,
 	),
 	"Incomplete Cholesky factorization with zero fill-in (IC(0)) preconditioner using KrylovPreconditioners.jl of X'X with GPU support",
 	"https://jso.dev/KrylovPreconditioners.jl/dev/krylov_preconditioners/",
@@ -89,6 +93,8 @@ lldl_pm = PreconditionerMethod(
 		supports_sparse = true,
 		supports_dense = true,
 		supported_backends = Set([:Krylov]),
+		backend = :LimitedLDLFactorizations,
+		type = :incomplete_factorization,
 	),
 	"limited-memory incomplete LDL factorization for symmetric matrices using LimitedLDLFactorizations.jl",
 	"https://github.com/JuliaSmoothOptimizers/LimitedLDLFactorizations.jl",
@@ -139,6 +145,8 @@ ldl_regularized_pm = PreconditionerMethod(
 		supports_sparse = true,
 		supports_dense = true,
 		supported_backends = Set([:Krylov]),
+		backend = :LDLFactorizations,
+		type = :incomplete_factorization,
 	),
 	"Regularized LDL factorization using LDLFactorizations.jl with dynamic regularization for singular/near-singular matrices. Adds small regularization to near-zero pivots to prevent breakdown.",
 	"https://jso.dev/tutorials/introduction-to-ldlfactorizations/#dynamic_regularization",
@@ -170,6 +178,8 @@ ilu0_pm = PreconditionerMethod(
 		supports_sparse = true,
 		supports_dense = false,
 		supported_backends = Set([:Krylov]),
+		backend = :ILUZero,
+		type = :incomplete_factorization,
 	),
 	"incomplete LU factorization with zero fill-in (ILU(0)) preconditioner",
 	"",
@@ -184,11 +194,3 @@ register_preconditioner_method!(lldl_pm)
 register_preconditioner_method!(ldl_regularized_pm)
 register_preconditioner_method!(ilu0_pm)
 
-# # map symbol -> PreconditionerMethod
-# const incomplete_factorizations_dict = Dict{Symbol, PreconditionerMethod}(
-# 	:ilu0_gpu => ilu_krylov_pm,
-# 	:ic0_gpu => ic0_krylov_pm,
-# 	:lldl => lldl_pm,
-# 	:ldl_reg => ldl_regularized_pm,
-# 	:ilu0 => ilu0_pm,
-# )

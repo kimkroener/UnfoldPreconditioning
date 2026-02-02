@@ -75,6 +75,9 @@ struct PreconditionerProperties
 	supports_gpu::Bool
 	supports_cpu::Bool
 	supports_multithreading::Bool
+
+	backend::Symbol
+	type::Symbol # e.g. diagonal, incomplete_factorization, random, algebraic_multigrid, stationary, ...
 end
 function PreconditionerProperties(;
 	supports_rectangular_matrices = true,
@@ -86,6 +89,8 @@ function PreconditionerProperties(;
 	supports_gpu = false,
 	supports_cpu = true,
 	supports_multithreading = false,
+	backend = :Unknown,
+	type = :unknown,
 )
 	@assert side in (:left, :right, :both) "specify method as :left or :right preconditioning, or :both"
 
@@ -99,6 +104,8 @@ function PreconditionerProperties(;
 		supports_gpu,
 		supports_cpu,
 		supports_multithreading,
+		backend,
+		type, 
 	)
 end
 

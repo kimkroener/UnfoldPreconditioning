@@ -57,6 +57,8 @@ col_pm = PreconditionerMethod(
 		supports_sparse = true,
 		supports_dense = true,
 		ldiv = true,
+		backend = :LinearAlgebra,
+		type = :diagonal,
 	),
 	"Scaling of X by column norms. \"Always cheap, sometimes effective. \"",
 	"",
@@ -72,12 +74,14 @@ row_pm = PreconditionerMethod(
 		supports_sparse = true,
 		supports_dense = true,
 		ldiv = true,
+		backend = :LinearAlgebra,
+		type = :diagonal,
 	),
 	"Scaling of X by row norms. \"Always cheap, sometimes effective. \"",
 	"",
 )
 register_preconditioner_method!(row_pm)
-
+	
 
 jacobi_pm = PreconditionerMethod(
 	:jacobi,
@@ -88,6 +92,8 @@ jacobi_pm = PreconditionerMethod(
 		supports_sparse = true,
 		supports_dense = true,
 		ldiv = true,
+		backend = :LinearAlgebra,
+		type = :diagonal,
 	),
 	"Jacobi preconditioner: diagonal scaling by diag(X'X)^{-1}",
 	"",
