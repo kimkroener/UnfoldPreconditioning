@@ -384,23 +384,20 @@ end
 
 """
 solve XB=Y, where Y could be multichannel data. 
-accepts data as [k×m]=[n_channels, n_timepoints] or [n_timepoints] for single channel.
-to be mathematically consistent with the typical lin. algebra notation, solve with X = [m×n], B=[n×k], Y=[m×k].
-
-
 """
 function solve_with_preconditioner(
 	X::AbstractMatrix, # [n_samples, n_features]=
-	data::Union{AbstractVector, AbstractMatrix}; # [n_samples] or [n_ch, n_timepoints]
+	data::Union{AbstractVector, AbstractMatrix}; # [n_timepoints] or [n_timepoints, n_channels]
 	solver::Symbol = :lsmr,
 	preconditioner::Symbol = :none,
 	options::SolverOptions = SolverOptions(),
 	preconditioner_kwargs::Union{Nothing, NamedTuple} = nothing,
 	solver_kwargs::Union{Nothing, NamedTuple} = nothing,
 	return_checks::Bool = false,
+	only_apply_native_preconditioning::Bool = false, # if true, only apply preconditioning if it can pass as an argument to the solver, for example such that the solver applies it internally on the residuals 
 )
 	if ndims(data) == 1
-		data = reshape(data, 1, :) # make it 2d with one channel
+		data = reshape(data, :, 1) # make it 2d with one channel
 	end
 	n_timepoints_data, n_channels = size(data)
 	n_timepoints_X, n_regressors = size(X)
@@ -417,6 +414,14 @@ function solve_with_preconditioner(
 		# use no preconditioning
 		pm = get_preconditioner(:none)
 	end
+	if only_apply_native_preconditioning && (checks["left_precond_manually"] || checks["right_precond_manually"])
+		@warn "Disabling preconditioner since it requires manual application which is disabled by only_apply_native_preconditioning=true."
+		pm = get_preconditioner(:none)
+		checks["use_preconditioner"] = false
+		checks["left_precond_manually"] = false
+		checks["right_precond_manually"] = false
+	end
+
 
 	# 1. normal equations
 	if checks["use_normal_equations"]
@@ -506,11 +511,9 @@ function solve_with_preconditioner_benchmark(
 	if ndims(data) == 1
 		data = reshape(data, 1, :)
 	end
-	n_channels, n_timepoints = size(data)
+	n_timepoints, n_channels = size(data)
 	n_timepoints_X, n_regressors = size(X)
 	@assert n_timepoints == n_timepoints_X "Dimension mismatch"
-
-	data = data'  # Transpose to [n_timepoints, n_channels]
 
 	# Store original dimensions
 	n_rows_orig, n_cols_orig = size(X)
@@ -627,7 +630,7 @@ function solve_with_preconditioner_benchmark(
 
 	if !isnothing(Pr) && checks["right_precond_manually"]
 		try
-			X, data = apply_right_preconditioner(X, data, Pr; ldiv = pm.properties.ldiv)
+			X, data = apply_right_preconditioner(X, Pr; ldiv = pm.properties.ldiv)
 			Pr_applied = Pr
 			Pr = nothing
 		catch e
@@ -722,8 +725,6 @@ function solve_with_preconditioner_benchmark(
 		end
 	end
 
-	# Transpose back
-	B = B'
 
 	# 6. Collect benchmark info
 	benchmark_info = summarize_benchmark_info(
